@@ -2,6 +2,10 @@
 
 A modern Kanban-style todo list application built with React and TypeScript. Organize tasks in columns, filter and search, and manage your workflow efficiently.
 
+You can find live example here
+
+https://vladyslavbondar.github.io/todo-list-application/
+
 ## Getting Started
 
 1. Install dependencies with your preferred package manager:
