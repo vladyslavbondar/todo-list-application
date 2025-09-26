@@ -59,13 +59,13 @@ function BulkActionsContent() {
 							size="sm"
 							variant="outlined"
 							onClick={() => markTasksAsCompleted(selectedTaskIds)}>
-							Complete
+							Mark as completed
 						</Button>
 						<Button
 							size="sm"
 							variant="outlined"
 							onClick={() => bulkDeleteTasks(selectedTaskIds)}>
-							Delete
+							Delete selected
 						</Button>
 						<Button size="sm" variant="outlined" onClick={unselectAll}>
 							x
@@ -96,7 +96,7 @@ function BulkActionsContent() {
 			<Button
 				variant="outlined"
 				onClick={() => bulkDeleteTasks(selectedTaskIds)}>
-				Delete
+				Delete selected
 			</Button>
 			<div className="flex flex-row items-center gap-2">
 				<p>Move to column:</p>
