@@ -9,9 +9,9 @@ export function CheckIcon() {
 			<path
 				d="M12 4L5 11L2 8"
 				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 		</svg>
 	);

@@ -16,11 +16,15 @@ import {
 	isColumnData,
 	isDraggingAColumn,
 } from "../../utils";
-import { useTodoListContext } from "../../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../../context";
 
 export function Board() {
-	const { columns, setColumns, setColumnById, moveTaskBetweenColumns } =
-		useTodoListContext();
+	const { columns } = useTodoListStateContext();
+	const { setColumns, setColumnById, moveTaskBetweenColumns } =
+		useTodoListDispatchContext();
 
 	const scrollableRef = useRef<HTMLDivElement | null>(null);
 
@@ -213,7 +217,7 @@ export function Board() {
 				className="p-0.5 flex h-full flex-row gap-3 overflow-x-auto [scrollbar-color:theme(colors.sky.600)_theme(colors.sky.800)] [scrollbar-width:thin]"
 				ref={scrollableRef}>
 				{columns.map((column) => (
-					<Column key={column.id} column={column} />
+					<Column key={column.id} columnId={column.id} />
 				))}
 			</div>
 		</div>

@@ -1,5 +1,5 @@
 import type { TodoListState } from "../types";
-import type { Task, TaskColumn, TaskColumnId } from "../../types";
+import type { TaskColumn, TaskColumnId } from "../../types";
 import { generateId } from "../utils/id-generator";
 
 export function setAllColumns(
@@ -20,7 +20,9 @@ export function setColumnById(
 	return {
 		...state,
 		columns: state.columns.map((column) =>
-			column.id === columnId ? updatedColumn : column
+			column.id === columnId
+				? { ...updatedColumn, version: column.version + 1 }
+				: column
 		),
 	};
 }
@@ -33,9 +35,12 @@ export function moveTaskBetweenColumns(
 	destinationIndex: number
 ): TodoListState {
 	// Remove task from home list
-	const homeColumn = state.columns.find((column) => column.id === homeColumnId);
-	const taskToMove = { ...homeColumn?.tasks[homeTaskIndex] } as Task;
-	const homeTasks = [...(homeColumn?.tasks || [])];
+	const homeColumn = state.columns.find((c) => c.id === homeColumnId);
+	if (!homeColumn || !homeColumn.tasks[homeTaskIndex]) {
+		throw new Error("Task to move not found");
+	}
+	const taskToMove = { ...homeColumn.tasks[homeTaskIndex] };
+	const homeTasks = [...(homeColumn.tasks || [])];
 	homeTasks.splice(homeTaskIndex, 1);
 
 	// Insert task into destination list
@@ -44,20 +49,20 @@ export function moveTaskBetweenColumns(
 	);
 	const destinationTasks = [...(destinationColumn?.tasks || [])];
 
-	if (!taskToMove) {
-		throw new Error("Task to move not found");
-	}
-
 	destinationTasks.splice(destinationIndex, 0, taskToMove);
 
 	return {
 		...state,
 		columns: state.columns.map((column) => {
 			if (column.id === homeColumn?.id) {
-				return { ...column, tasks: homeTasks };
+				return { ...column, tasks: homeTasks, version: column.version + 1 };
 			}
 			if (column.id === destinationColumnId) {
-				return { ...column, tasks: destinationTasks };
+				return {
+					...column,
+					tasks: destinationTasks,
+					version: column.version + 1,
+				};
 			}
 			return column;
 		}),
@@ -70,7 +75,10 @@ export function addNewColumn(
 ): TodoListState {
 	return {
 		...state,
-		columns: [...state.columns, { title, tasks: [], id: generateId() }],
+		columns: [
+			...state.columns,
+			{ title, tasks: [], id: generateId(), version: 0 },
+		],
 	};
 }
 
@@ -86,7 +94,9 @@ export function editColumn(
 	return {
 		...state,
 		columns: state.columns.map((column) =>
-			column.id === columnId ? { ...column, title: title.trim() } : column
+			column.id === columnId
+				? { ...column, title: title.trim(), version: column.version + 1 }
+				: column
 		),
 	};
 }

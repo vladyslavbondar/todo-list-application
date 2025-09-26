@@ -1,6 +1,6 @@
 import { useActionState } from "react";
 import { Button, Input, Modal, Label } from "../../../components";
-import { useTodoListContext } from "../../context";
+import { useTodoListDispatchContext } from "../../context";
 import type { Task } from "../../types";
 
 interface EditTaskModalProps {
@@ -10,7 +10,7 @@ interface EditTaskModalProps {
 }
 
 export function EditTaskModal({ task, isOpen, onClose }: EditTaskModalProps) {
-	const { editTask } = useTodoListContext();
+	const { editTask } = useTodoListDispatchContext();
 
 	const editTaskAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;

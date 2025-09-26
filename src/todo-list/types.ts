@@ -13,4 +13,5 @@ export interface TaskColumn {
 	id: TaskColumnId;
 	title: string;
 	tasks: Task[];
+	version: number;
 }

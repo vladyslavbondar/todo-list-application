@@ -7,15 +7,19 @@ import {
 	DropDownMenuItem,
 } from "../../../components";
 import { ThreeDotsIcon } from "../../../icons/three-dots";
-import { useTodoListContext } from "../../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../../context";
 import type { Task } from "../../types";
 
 import { EditTaskModal } from "./edit-task-modal";
 import { SearchHighlight } from "./search-highlight";
 
 export function CardContent({ task }: { task: Task }) {
-	const { searchQuery, toggleSelectTask, toggleCompleteTask, deleteTask } =
-		useTodoListContext();
+	const { searchQuery } = useTodoListStateContext();
+	const { toggleSelectTask, toggleCompleteTask, deleteTask } =
+		useTodoListDispatchContext();
 
 	const [isOpen, setIsOpen] = useState(false);
 

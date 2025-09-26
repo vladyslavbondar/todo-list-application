@@ -6,5 +6,4 @@ export * from "./menu";
 export * from "./checkbox";
 export * from "./toggle";
 export * from "./radio-button";
-export * from "./three-dots-icon";
 export * from "./select";
