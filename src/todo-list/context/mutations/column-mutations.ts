@@ -20,7 +20,9 @@ export function setColumnById(
 	return {
 		...state,
 		columns: state.columns.map((column) =>
-			column.id === columnId ? updatedColumn : column
+			column.id === columnId
+				? { ...updatedColumn, version: column.version + 1 }
+				: column
 		),
 	};
 }
@@ -53,10 +55,14 @@ export function moveTaskBetweenColumns(
 		...state,
 		columns: state.columns.map((column) => {
 			if (column.id === homeColumn?.id) {
-				return { ...column, tasks: homeTasks };
+				return { ...column, tasks: homeTasks, version: column.version + 1 };
 			}
 			if (column.id === destinationColumnId) {
-				return { ...column, tasks: destinationTasks };
+				return {
+					...column,
+					tasks: destinationTasks,
+					version: column.version + 1,
+				};
 			}
 			return column;
 		}),
@@ -69,7 +75,10 @@ export function addNewColumn(
 ): TodoListState {
 	return {
 		...state,
-		columns: [...state.columns, { title, tasks: [], id: generateId() }],
+		columns: [
+			...state.columns,
+			{ title, tasks: [], id: generateId(), version: 0 },
+		],
 	};
 }
 
@@ -85,7 +94,9 @@ export function editColumn(
 	return {
 		...state,
 		columns: state.columns.map((column) =>
-			column.id === columnId ? { ...column, title: title.trim() } : column
+			column.id === columnId
+				? { ...column, title: title.trim(), version: column.version + 1 }
+				: column
 		),
 	};
 }

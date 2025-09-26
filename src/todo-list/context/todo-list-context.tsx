@@ -12,7 +12,6 @@ import {
 import { useTodoListState, initialState } from "./todo-list-state";
 import type { TaskColumn, TaskColumnId, TaskId } from "../types";
 import type { FilterType } from "./types";
-import { filterColumns } from "./utils/filter-utils";
 import { mockTodoData } from "../mock-todo-list";
 
 const STORAGE_KEY = "todoListState";
@@ -166,10 +165,6 @@ export function TodoListContextProvider({ children }: PropsWithChildren) {
 		[dispatch]
 	);
 
-	const filteredColumns = useMemo(() => {
-		return filterColumns(state.columns, state.columnFilters, state.searchQuery);
-	}, [state.columns, state.columnFilters, state.searchQuery]);
-
 	useEffect(() => {
 		if (!isLoadedRef.current) {
 			const stored = localStorage.getItem(STORAGE_KEY);
@@ -240,11 +235,11 @@ export function TodoListContextProvider({ children }: PropsWithChildren) {
 
 	const stateContextValue = useMemo(
 		() => ({
-			columns: filteredColumns,
+			columns: state.columns,
 			columnFilters: state.columnFilters,
 			searchQuery: state.searchQuery,
 		}),
-		[filteredColumns, state.columnFilters, state.searchQuery]
+		[state.columns, state.columnFilters, state.searchQuery]
 	);
 
 	return (

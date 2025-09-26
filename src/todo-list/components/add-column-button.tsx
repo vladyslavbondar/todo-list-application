@@ -27,8 +27,6 @@ export function AddColumnButton() {
 		setIsOpen(!isOpen);
 	};
 
-	// TODO: close modal with error, open again BUG error is still here
-
 	return (
 		<>
 			<Button onClick={handleToggleModal}>Add Column</Button>

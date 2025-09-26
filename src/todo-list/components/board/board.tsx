@@ -217,7 +217,7 @@ export function Board() {
 				className="p-0.5 flex h-full flex-row gap-3 overflow-x-auto [scrollbar-color:theme(colors.sky.600)_theme(colors.sky.800)] [scrollbar-width:thin]"
 				ref={scrollableRef}>
 				{columns.map((column) => (
-					<Column key={column.id} column={column} />
+					<Column key={column.id} columnId={column.id} />
 				))}
 			</div>
 		</div>

@@ -26,7 +26,12 @@ export function filterTasks(
 		case "all":
 			return tasks.filter((task) => findTasksBySearchQuery(task, searchQuery));
 		default:
-			return tasks;
+			if (searchQuery.trim() === "") {
+				return tasks;
+			}
+			return tasks.filter((task) =>
+				task.description.toLowerCase().includes(searchQuery.toLowerCase())
+			);
 	}
 }
 
@@ -45,6 +50,7 @@ export function filterColumn(
 	};
 }
 
+/* deprecated soon */
 export function filterColumns(
 	columns: TaskColumn[],
 	columnFilters: ColumnFilters,

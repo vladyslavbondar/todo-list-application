@@ -4,6 +4,7 @@ export const mockTodoData: TaskColumn[] = [
 	{
 		id: "1",
 		title: "To Do",
+		version: 0,
 		tasks: [
 			{
 				id: "task-1",
@@ -28,6 +29,7 @@ export const mockTodoData: TaskColumn[] = [
 	{
 		id: "2",
 		title: "In Progress",
+		version: 0,
 		tasks: [
 			{
 				id: "task-4",
@@ -46,6 +48,7 @@ export const mockTodoData: TaskColumn[] = [
 	{
 		id: "3",
 		title: "Done",
+		version: 0,
 		tasks: [
 			{
 				id: "task-6",

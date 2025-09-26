@@ -15,6 +15,7 @@ export function selectAllTasksInColumn(
 							...task,
 							selected: true,
 						})),
+						version: column.version + 1,
 				  }
 				: column
 		),
@@ -35,6 +36,7 @@ export function unselectAllTasksInColumn(
 							...task,
 							selected: false,
 						})),
+						version: column.version + 1,
 				  }
 				: column
 		),
@@ -44,12 +46,16 @@ export function unselectAllTasksInColumn(
 export function unselectAll(state: TodoListState): TodoListState {
 	return {
 		...state,
-		columns: state.columns.map((column) => ({
-			...column,
-			tasks: column.tasks.map((task) => ({
-				...task,
-				selected: false,
-			})),
-		})),
+		columns: state.columns.map((column) => {
+			const hasSelectedTasks = column.tasks.some((task) => task.selected);
+			return {
+				...column,
+				tasks: column.tasks.map((task) => ({
+					...task,
+					selected: false,
+				})),
+				version: hasSelectedTasks ? column.version + 1 : column.version,
+			};
+		}),
 	};
 }

@@ -12,6 +12,11 @@ export function setColumnFilter(
 			...state.columnFilters,
 			[columnId]: filter,
 		},
+		columns: state.columns.map((column) =>
+			column.id === columnId
+				? { ...column, version: column.version + 1 }
+				: column
+		),
 	};
 }
 
@@ -27,6 +32,11 @@ export function clearColumnFilter(
 	return {
 		...state,
 		columnFilters: currentColumnFilters,
+		columns: state.columns.map((column) =>
+			column.id === columnId
+				? { ...column, version: column.version + 1 }
+				: column
+		),
 	};
 }
 
@@ -37,5 +47,9 @@ export function setSearchQuery(
 	return {
 		...state,
 		searchQuery,
+		columns: state.columns.map((column) => ({
+			...column,
+			version: column.version + 1,
+		})),
 	};
 }
