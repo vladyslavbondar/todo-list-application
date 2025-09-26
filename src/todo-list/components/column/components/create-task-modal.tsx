@@ -16,10 +16,7 @@ export function CreateTaskModal({
 }: CreateTaskModalProps) {
 	const { addTask } = useTodoListContext();
 
-	const addTaskAction = (
-		prevState: { error: string | null },
-		formData: FormData
-	) => {
+	const addTaskAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;
 
 		if (!title?.trim()) {

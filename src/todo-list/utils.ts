@@ -1,5 +1,19 @@
-export function isTaskData(value: Record<string, unknown>): boolean {
-	return "task" in value;
+import type { Task, TaskColumn, TaskColumnId } from "./types";
+
+export interface TaskDragData {
+	task: Task;
+	columnId: TaskColumnId;
+	rect: DOMRect;
+}
+
+export function isTaskData(value: unknown): value is TaskDragData {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		"task" in value &&
+		typeof value.task === "object" &&
+		value.task !== null
+	);
 }
 
 export function isDraggingATask({
@@ -10,12 +24,35 @@ export function isDraggingATask({
 	return isTaskData(source.data);
 }
 
-export function isTaskDropTargetData(value: Record<string, unknown>) {
-	return value.task !== undefined;
+export interface TaskDropTargetData {
+	task: Task;
+	columnId: TaskColumnId;
 }
 
-export function isColumnData(value: Record<string, unknown>) {
-	return value.task === undefined;
+export function isTaskDropTargetData(
+	value: unknown
+): value is TaskDropTargetData {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		"task" in value &&
+		typeof value.task === "object" &&
+		value.task !== null
+	);
+}
+
+export interface ColumnData {
+	column: TaskColumn;
+}
+
+export function isColumnData(value: unknown): value is ColumnData {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		"column" in value &&
+		typeof value.column === "object" &&
+		value.column !== null
+	);
 }
 
 export function isDraggingAColumn({

@@ -12,10 +12,7 @@ interface EditTaskModalProps {
 export function EditTaskModal({ task, isOpen, onClose }: EditTaskModalProps) {
 	const { editTask } = useTodoListContext();
 
-	const editTaskAction = (
-		prevState: { error: string | null },
-		formData: FormData
-	) => {
+	const editTaskAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;
 
 		if (!title?.trim()) {

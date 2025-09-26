@@ -6,10 +6,7 @@ export function AddColumnButton() {
 	const [isOpen, setIsOpen] = useState(false);
 	const { addColumn } = useTodoListContext();
 
-	const addColumnAction = (
-		prevState: { error: string | null },
-		formData: FormData
-	) => {
+	const addColumnAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;
 
 		if (!title?.trim()) {
