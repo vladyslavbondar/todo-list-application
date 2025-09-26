@@ -15,8 +15,10 @@ import type { Task } from "../../types";
 
 import { EditTaskModal } from "./edit-task-modal";
 import { SearchHighlight } from "./search-highlight";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 export function CardContent({ task }: { task: Task }) {
+	const isMobile = useIsMobile();
 	const { searchQuery } = useTodoListStateContext();
 	const { toggleSelectTask, toggleCompleteTask, deleteTask } =
 		useTodoListDispatchContext();
@@ -32,8 +34,9 @@ export function CardContent({ task }: { task: Task }) {
 			<div
 				className={clsx(
 					"flex flex-col items-center",
-					"group-hover:visible",
-					task.selected ? "visible" : "invisible"
+
+					!isMobile && "group-hover:visible",
+					isMobile ? "visible" : task.selected ? "visible" : "invisible"
 				)}>
 				<Checkbox
 					checked={task.selected}

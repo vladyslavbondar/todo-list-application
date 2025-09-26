@@ -40,7 +40,7 @@ export function EditTaskModal({ task, isOpen, onClose }: EditTaskModalProps) {
 					/>
 				</Label>
 				<div className="flex flex-row justify-end gap-2">
-					<Button type="button" onClick={onClose}>
+					<Button variant="outlined" type="button" onClick={onClose}>
 						Cancel
 					</Button>
 					<Button type="submit">Save Changes</Button>

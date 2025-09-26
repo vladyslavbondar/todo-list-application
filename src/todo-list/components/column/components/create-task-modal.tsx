@@ -39,7 +39,7 @@ export function CreateTaskModal({
 					<Input name="title" autoFocus error={state.error} />
 				</Label>
 				<div className="flex flex-row justify-end gap-2">
-					<Button type="button" onClick={onClose}>
+					<Button variant="outlined" type="button" onClick={onClose}>
 						Cancel
 					</Button>
 					<Button type="submit">Add Task</Button>

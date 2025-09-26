@@ -4,6 +4,7 @@ import {
 	useTodoListStateContext,
 } from "../../context";
 import type { TaskId } from "../../types";
+import { useIsMobile } from "../../../hooks";
 
 import { Button, Select } from "../../../components";
 
@@ -29,6 +30,7 @@ function BulkActionsContent() {
 		moveTasksToColumn,
 		unselectAll,
 	} = useTodoListDispatchContext();
+	const isMobile = useIsMobile();
 
 	const columnOptions = useMemo(() => {
 		return columns.map((column) => ({
@@ -47,6 +49,42 @@ function BulkActionsContent() {
 			return acc;
 		}, [] as TaskId[]);
 	}, [columns]);
+
+	if (isMobile) {
+		return (
+			<div className="fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-gray-300 p-3">
+				<div className="flex flex-col gap-3">
+					<div className="flex flex-row justify-between">
+						<Button
+							size="sm"
+							variant="outlined"
+							onClick={() => markTasksAsCompleted(selectedTaskIds)}>
+							Complete
+						</Button>
+						<Button
+							size="sm"
+							variant="outlined"
+							onClick={() => bulkDeleteTasks(selectedTaskIds)}>
+							Delete
+						</Button>
+						<Button size="sm" variant="outlined" onClick={unselectAll}>
+							x
+						</Button>
+					</div>
+					<div className="flex flex-col gap-2">
+						<p className="text-sm font-medium text-gray-700">Move to column:</p>
+						<Select
+							placeholder="Select column"
+							options={columnOptions}
+							onChange={(value) =>
+								moveTasksToColumn(selectedTaskIds, value as string)
+							}
+						/>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="w-max fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-2 p-3 bg-white/80 backdrop-blur-md rounded-lg shadow-lg border border-gray-300">

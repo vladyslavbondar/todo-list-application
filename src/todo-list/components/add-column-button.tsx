@@ -37,7 +37,10 @@ export function AddColumnButton() {
 							<Input name="title" autoFocus error={state.error} />
 						</Label>
 						<div className="flex flex-row justify-end gap-2">
-							<Button type="button" onClick={handleToggleModal}>
+							<Button
+								variant="outlined"
+								type="button"
+								onClick={handleToggleModal}>
 								Cancel
 							</Button>
 							<Button type="submit">Add Column</Button>

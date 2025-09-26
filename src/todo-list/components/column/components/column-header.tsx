@@ -5,8 +5,11 @@ import { FilterColumn } from "./filter-column";
 import type { TaskColumn } from "../../../types";
 import { useTodoListDispatchContext } from "../../../context";
 import { ColumnActions } from "./column-actions";
+import { useIsMobile } from "../../../../hooks/useIsMobile";
 
 export function ColumnHeader({ column }: { column: TaskColumn }) {
+	const isMobile = useIsMobile();
+
 	const { selectAllTasks, unselectAllTasks } = useTodoListDispatchContext();
 
 	const hasSelected = useMemo(() => {
@@ -20,14 +23,15 @@ export function ColumnHeader({ column }: { column: TaskColumn }) {
 	const selectedAll = useMemo(() => {
 		return !selectAllDisabled && column.tasks.every((task) => task.selected);
 	}, [column, selectAllDisabled]);
+
 	return (
 		<>
 			<div className="flex flex-row items-center gap-2">
 				<div
 					className={clsx(
-						"flex flex-col items-center",
-						"group-hover:visible pl-2",
-						hasSelected ? "visible" : "invisible"
+						"flex flex-col items-center pl-2",
+						!isMobile && "group-hover:visible",
+						isMobile ? "visible" : hasSelected ? "visible" : "invisible"
 					)}>
 					<Checkbox
 						disabled={selectAllDisabled}
