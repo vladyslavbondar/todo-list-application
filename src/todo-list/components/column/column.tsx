@@ -54,13 +54,13 @@ const stateStyles: { [Key in TColumnState["type"]]: string } = {
 
 const idle = { type: "idle" } satisfies TColumnState;
 
-const CardList = memo(function CardList({ column }: { column: TaskColumn }) {
+const CardList = memo(({ column }: { column: TaskColumn }) => {
 	return column.tasks.map((task) => (
 		<Card key={task.id} task={task} columnId={column.id} />
 	));
 });
 
-export const Column = memo(function Column({ column }: { column: TaskColumn }) {
+export const Column = memo(({ column }: { column: TaskColumn }) => {
 	const scrollableRef = useRef<HTMLDivElement | null>(null);
 	const outerFullHeightRef = useRef<HTMLDivElement | null>(null);
 	const headerRef = useRef<HTMLDivElement | null>(null);

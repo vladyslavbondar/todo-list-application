@@ -115,139 +115,135 @@ export function CardDisplay({
 	);
 }
 
-export const Card = memo(function Card({
-	task,
-	columnId,
-}: {
-	task: Task;
-	columnId: TaskColumnId;
-}) {
-	const outerRef = useRef<HTMLDivElement | null>(null);
-	const innerRef = useRef<HTMLDivElement | null>(null);
-	const [state, setState] = useState<TCardState>(idle);
+export const Card = memo(
+	({ task, columnId }: { task: Task; columnId: TaskColumnId }) => {
+		const outerRef = useRef<HTMLDivElement | null>(null);
+		const innerRef = useRef<HTMLDivElement | null>(null);
+		const [state, setState] = useState<TCardState>(idle);
 
-	useEffect(() => {
-		const outer = outerRef.current;
-		const inner = innerRef.current;
-		invariant(outer && inner);
+		useEffect(() => {
+			const outer = outerRef.current;
+			const inner = innerRef.current;
+			invariant(outer && inner);
 
-		return combine(
-			draggable({
-				element: inner,
-				getInitialData: ({ element }) => ({
-					task,
-					columnId,
-					rect: element.getBoundingClientRect(),
+			return combine(
+				draggable({
+					element: inner,
+					getInitialData: ({ element }) => ({
+						task,
+						columnId,
+						rect: element.getBoundingClientRect(),
+					}),
+					onGenerateDragPreview({ nativeSetDragImage, location, source }) {
+						const data = source.data;
+						invariant(isTaskData(data));
+						setCustomNativeDragPreview({
+							nativeSetDragImage,
+							getOffset: preserveOffsetOnSource({
+								element: inner,
+								input: location.current.input,
+							}),
+							render({ container }) {
+								// Demonstrating using a react portal to generate a preview
+								setState({
+									type: "preview",
+									container,
+									dragging: inner.getBoundingClientRect(),
+								});
+							},
+						});
+					},
+					onDragStart() {
+						setState({ type: "is-dragging" });
+					},
+					onDrop() {
+						setState(idle);
+					},
 				}),
-				onGenerateDragPreview({ nativeSetDragImage, location, source }) {
-					const data = source.data;
-					invariant(isTaskData(data));
-					setCustomNativeDragPreview({
-						nativeSetDragImage,
-						getOffset: preserveOffsetOnSource({
-							element: inner,
-							input: location.current.input,
-						}),
-						render({ container }) {
-							// Demonstrating using a react portal to generate a preview
-							setState({
-								type: "preview",
-								container,
-								dragging: inner.getBoundingClientRect(),
-							});
-						},
-					});
-				},
-				onDragStart() {
-					setState({ type: "is-dragging" });
-				},
-				onDrop() {
-					setState(idle);
-				},
-			}),
-			dropTargetForElements({
-				element: outer,
-				getIsSticky: () => true,
-				canDrop: isDraggingATask,
-				getData: ({ element, input }) => {
-					return attachClosestEdge(
-						{ task, columnId },
-						{ element, input, allowedEdges: ["top", "bottom"] }
-					);
-				},
-				onDragEnter({ source, self }) {
-					if (!isTaskData(source.data)) {
-						return;
-					}
-					if (source.data.task.id === task.id) {
-						return;
-					}
-					const closestEdge = extractClosestEdge(self.data);
-					if (!closestEdge) {
-						return;
-					}
-
-					setState({
-						type: "is-over",
-						dragging: source.data.rect as DOMRect,
-						closestEdge,
-					});
-				},
-				onDrag({ source, self }) {
-					if (!isTaskData(source.data)) {
-						return;
-					}
-					if (source.data.task.id === task.id) {
-						return;
-					}
-					const closestEdge = extractClosestEdge(self.data);
-					if (!closestEdge) {
-						return;
-					}
-					// optimization - Don't update react state if we don't need to.
-					const proposed: TCardState = {
-						type: "is-over",
-						dragging: source.data.rect as DOMRect,
-						closestEdge,
-					};
-					setState((current) => {
-						if (isShallowEqual(proposed, current)) {
-							return current;
+				dropTargetForElements({
+					element: outer,
+					getIsSticky: () => true,
+					canDrop: isDraggingATask,
+					getData: ({ element, input }) => {
+						return attachClosestEdge(
+							{ task, columnId },
+							{ element, input, allowedEdges: ["top", "bottom"] }
+						);
+					},
+					onDragEnter({ source, self }) {
+						if (!isTaskData(source.data)) {
+							return;
 						}
-						return proposed;
-					});
-				},
-				onDragLeave({ source }) {
-					if (!isTaskData(source.data)) {
-						return;
-					}
-					if (source.data.task.id === task.id) {
-						setState({ type: "is-dragging-and-left-self" });
-						return;
-					}
-					setState(idle);
-				},
-				onDrop() {
-					setState(idle);
-				},
-			})
-		);
-	}, [task, columnId]);
+						if (source.data.task.id === task.id) {
+							return;
+						}
+						const closestEdge = extractClosestEdge(self.data);
+						if (!closestEdge) {
+							return;
+						}
 
-	return (
-		<>
-			<CardDisplay
-				outerRef={outerRef}
-				innerRef={innerRef}
-				state={state}
-				task={task}
-			/>
-			{state.type === "preview"
-				? createPortal(
-						<CardDisplay state={state} task={task} />,
-						state.container
-				  )
-				: null}
-		</>
-	);
-});
+						setState({
+							type: "is-over",
+							dragging: source.data.rect as DOMRect,
+							closestEdge,
+						});
+					},
+					onDrag({ source, self }) {
+						if (!isTaskData(source.data)) {
+							return;
+						}
+						if (source.data.task.id === task.id) {
+							return;
+						}
+						const closestEdge = extractClosestEdge(self.data);
+						if (!closestEdge) {
+							return;
+						}
+						// optimization - Don't update react state if we don't need to.
+						const proposed: TCardState = {
+							type: "is-over",
+							dragging: source.data.rect as DOMRect,
+							closestEdge,
+						};
+						setState((current) => {
+							if (isShallowEqual(proposed, current)) {
+								return current;
+							}
+							return proposed;
+						});
+					},
+					onDragLeave({ source }) {
+						if (!isTaskData(source.data)) {
+							return;
+						}
+						if (source.data.task.id === task.id) {
+							setState({ type: "is-dragging-and-left-self" });
+							return;
+						}
+						setState(idle);
+					},
+					onDrop() {
+						setState(idle);
+					},
+				})
+			);
+		}, [task, columnId]);
+
+		return (
+			<>
+				<CardDisplay
+					outerRef={outerRef}
+					innerRef={innerRef}
+					state={state}
+					task={task}
+				/>
+				{state.type === "preview"
+					? createPortal(
+							<CardDisplay state={state} task={task} />,
+							state.container
+					  )
+					: null}
+			</>
+		);
+	}
+);

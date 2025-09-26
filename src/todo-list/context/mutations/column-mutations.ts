@@ -1,5 +1,5 @@
 import type { TodoListState } from "../types";
-import type { Task, TaskColumn, TaskColumnId } from "../../types";
+import type { TaskColumn, TaskColumnId } from "../../types";
 import { generateId } from "../utils/id-generator";
 
 export function setAllColumns(
@@ -33,9 +33,12 @@ export function moveTaskBetweenColumns(
 	destinationIndex: number
 ): TodoListState {
 	// Remove task from home list
-	const homeColumn = state.columns.find((column) => column.id === homeColumnId);
-	const taskToMove = { ...homeColumn?.tasks[homeTaskIndex] } as Task;
-	const homeTasks = [...(homeColumn?.tasks || [])];
+	const homeColumn = state.columns.find((c) => c.id === homeColumnId);
+	if (!homeColumn || !homeColumn.tasks[homeTaskIndex]) {
+		throw new Error("Task to move not found");
+	}
+	const taskToMove = { ...homeColumn.tasks[homeTaskIndex] };
+	const homeTasks = [...(homeColumn.tasks || [])];
 	homeTasks.splice(homeTaskIndex, 1);
 
 	// Insert task into destination list
@@ -43,10 +46,6 @@ export function moveTaskBetweenColumns(
 		(column) => column.id === destinationColumnId
 	);
 	const destinationTasks = [...(destinationColumn?.tasks || [])];
-
-	if (!taskToMove) {
-		throw new Error("Task to move not found");
-	}
 
 	destinationTasks.splice(destinationIndex, 0, taskToMove);
 
