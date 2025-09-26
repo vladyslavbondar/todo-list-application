@@ -1,11 +1,14 @@
 import { useMemo } from "react";
-import { useTodoListContext } from "../../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../../context";
 import type { TaskId } from "../../types";
 
 import { Button, Select } from "../../../components";
 
 export function BulkActions() {
-	const { columns } = useTodoListContext();
+	const { columns } = useTodoListStateContext();
 
 	const hasSelectedTasks = useMemo(() => {
 		return columns.some((column) => column.tasks.some((task) => task.selected));
@@ -19,13 +22,13 @@ export function BulkActions() {
 }
 
 function BulkActionsContent() {
+	const { columns } = useTodoListStateContext();
 	const {
-		columns,
 		markTasksAsCompleted,
 		bulkDeleteTasks,
 		moveTasksToColumn,
 		unselectAll,
-	} = useTodoListContext();
+	} = useTodoListDispatchContext();
 
 	const columnOptions = useMemo(() => {
 		return columns.map((column) => ({

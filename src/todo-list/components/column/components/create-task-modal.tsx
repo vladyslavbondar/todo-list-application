@@ -1,6 +1,6 @@
 import { useActionState } from "react";
 import { Button, Input, Modal, Label } from "../../../../components";
-import { useTodoListContext } from "../../../context";
+import { useTodoListDispatchContext } from "../../../context";
 import type { TaskColumnId } from "../../../types";
 
 interface CreateTaskModalProps {
@@ -14,7 +14,7 @@ export function CreateTaskModal({
 	isOpen,
 	onClose,
 }: CreateTaskModalProps) {
-	const { addTask } = useTodoListContext();
+	const { addTask } = useTodoListDispatchContext();
 
 	const addTaskAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;

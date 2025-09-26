@@ -5,7 +5,7 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { preserveOffsetOnSource } from "@atlaskit/pragmatic-drag-and-drop/element/preserve-offset-on-source";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import { type RefObject, useEffect, useRef, useState } from "react";
+import { memo, type RefObject, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import invariant from "tiny-invariant";
 
@@ -115,7 +115,7 @@ export function CardDisplay({
 	);
 }
 
-export function Card({
+export const Card = memo(function Card({
 	task,
 	columnId,
 }: {
@@ -250,4 +250,4 @@ export function Card({
 				: null}
 		</>
 	);
-}
+});

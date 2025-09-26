@@ -1,10 +1,10 @@
 import { useState, useActionState } from "react";
 import { Button, Input, Modal, Label } from "../../components";
-import { useTodoListContext } from "../context";
+import { useTodoListDispatchContext } from "../context";
 
 export function AddColumnButton() {
 	const [isOpen, setIsOpen] = useState(false);
-	const { addColumn } = useTodoListContext();
+	const { addColumn } = useTodoListDispatchContext();
 
 	const addColumnAction = (_: unknown, formData: FormData) => {
 		const title = formData.get("title") as string;

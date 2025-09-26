@@ -16,11 +16,15 @@ import {
 	isColumnData,
 	isDraggingAColumn,
 } from "../../utils";
-import { useTodoListContext } from "../../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../../context";
 
 export function Board() {
-	const { columns, setColumns, setColumnById, moveTaskBetweenColumns } =
-		useTodoListContext();
+	const { columns } = useTodoListStateContext();
+	const { setColumns, setColumnById, moveTaskBetweenColumns } =
+		useTodoListDispatchContext();
 
 	const scrollableRef = useRef<HTMLDivElement | null>(null);
 

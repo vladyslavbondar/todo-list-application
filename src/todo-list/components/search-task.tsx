@@ -1,8 +1,12 @@
 import { Input } from "../../components";
-import { useTodoListContext } from "../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../context";
 
 export function SearchTask() {
-	const { searchQuery, setSearchQuery } = useTodoListContext();
+	const { searchQuery } = useTodoListStateContext();
+	const { setSearchQuery } = useTodoListDispatchContext();
 
 	return (
 		<Input

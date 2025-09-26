@@ -2,10 +2,13 @@ import { createContext, useContext } from "react";
 import type { TaskColumn, TaskColumnId, TaskId } from "../types";
 import type { FilterType } from "./types";
 
-interface TodoListContextValue {
+interface TodoListStateContextValue {
 	columns: TaskColumn[];
 	columnFilters: { [columnId: TaskColumnId]: FilterType };
 	searchQuery: string;
+}
+
+interface TodoListDispatchContextValue {
 	setColumns: (columns: TaskColumn[]) => void;
 	addColumn: (title: string) => void;
 	editColumn: (columnId: TaskColumnId, title: string) => void;
@@ -35,16 +38,30 @@ interface TodoListContextValue {
 	) => void;
 }
 
-export const TodoListContext = createContext<TodoListContextValue | null>(null);
+export const TodoListStateContext =
+	createContext<TodoListStateContextValue | null>(null);
 
-export type { TodoListContextValue };
+export const TodoListDispatchContext =
+	createContext<TodoListDispatchContextValue | null>(null);
 
-export function useTodoListContext(): TodoListContextValue {
-	const context = useContext(TodoListContext);
+export function useTodoListStateContext(): TodoListStateContextValue {
+	const context = useContext(TodoListStateContext);
 
 	if (context === null) {
 		throw new Error(
-			"useTodoListContext must be used within a TodoListContextProvider"
+			"useTodoListStateContext must be used within a TodoListContextProvider"
+		);
+	}
+
+	return context;
+}
+
+export function useTodoListDispatchContext(): TodoListDispatchContextValue {
+	const context = useContext(TodoListDispatchContext);
+
+	if (context === null) {
+		throw new Error(
+			"useTodoListDispatchContext must be used within a TodoListContextProvider"
 		);
 	}
 

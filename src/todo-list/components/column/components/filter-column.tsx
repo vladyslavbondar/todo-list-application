@@ -1,5 +1,8 @@
 import { Select } from "../../../../components";
-import { useTodoListContext } from "../../../context";
+import {
+	useTodoListDispatchContext,
+	useTodoListStateContext,
+} from "../../../context";
 import type { FilterType } from "../../../context/types";
 import type { TaskColumnId } from "../../../types";
 
@@ -10,7 +13,8 @@ const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
 ];
 
 export function FilterColumn({ columnId }: { columnId: TaskColumnId }) {
-	const { setColumnFilter, columnFilters } = useTodoListContext();
+	const { setColumnFilter } = useTodoListDispatchContext();
+	const { columnFilters } = useTodoListStateContext();
 
 	return (
 		<div className="w-24">

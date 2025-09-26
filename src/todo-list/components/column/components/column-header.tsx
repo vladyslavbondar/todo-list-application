@@ -3,11 +3,11 @@ import clsx from "clsx";
 import { Checkbox } from "../../../../components";
 import { FilterColumn } from "./filter-column";
 import type { TaskColumn } from "../../../types";
-import { useTodoListContext } from "../../../context";
+import { useTodoListDispatchContext } from "../../../context";
 import { ColumnActions } from "./column-actions";
 
 export function ColumnHeader({ column }: { column: TaskColumn }) {
-	const { selectAllTasks, unselectAllTasks } = useTodoListContext();
+	const { selectAllTasks, unselectAllTasks } = useTodoListDispatchContext();
 
 	const hasSelected = useMemo(() => {
 		return column.tasks.some((task) => task.selected);

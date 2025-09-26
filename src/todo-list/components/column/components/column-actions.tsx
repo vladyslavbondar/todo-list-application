@@ -2,11 +2,11 @@ import { useState } from "react";
 import { DropDownMenu, DropDownMenuItem } from "../../../../components";
 import { ThreeDotsIcon } from "../../../../icons/three-dots";
 import { CreateTaskModal } from "./create-task-modal";
-import { useTodoListContext } from "../../../context";
+import { useTodoListDispatchContext } from "../../../context";
 import type { TaskColumnId } from "../../../types";
 
 export function ColumnActions({ columnId }: { columnId: TaskColumnId }) {
-	const { deleteColumn } = useTodoListContext();
+	const { deleteColumn } = useTodoListDispatchContext();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleModal = () => {

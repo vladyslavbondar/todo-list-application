@@ -5,7 +5,10 @@ import {
 	type PropsWithChildren,
 	useCallback,
 } from "react";
-import { TodoListContext } from "./todo-list-context-hook";
+import {
+	TodoListDispatchContext,
+	TodoListStateContext,
+} from "./todo-list-context-hook";
 import { useTodoListState, initialState } from "./todo-list-state";
 import type { TaskColumn, TaskColumnId, TaskId } from "../types";
 import type { FilterType } from "./types";
@@ -190,33 +193,65 @@ export function TodoListContextProvider({ children }: PropsWithChildren) {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 	}, [state, dispatch]);
 
+	const dispatchContextValue = useMemo(
+		() => ({
+			setColumns,
+			addColumn,
+			addTask,
+			deleteTask,
+			toggleCompleteTask,
+			toggleSelectTask,
+			selectAllTasks,
+			unselectAllTasks,
+			unselectAll,
+			setColumnFilter,
+			editColumn,
+			deleteColumn,
+			editTask,
+			bulkDeleteTasks,
+			markTasksAsCompleted,
+			moveTasksToColumn,
+			setSearchQuery,
+			setColumnById,
+			moveTaskBetweenColumns,
+		}),
+		[
+			setColumns,
+			addColumn,
+			addTask,
+			deleteTask,
+			toggleCompleteTask,
+			toggleSelectTask,
+			selectAllTasks,
+			unselectAllTasks,
+			unselectAll,
+			setColumnFilter,
+			editColumn,
+			deleteColumn,
+			editTask,
+			bulkDeleteTasks,
+			markTasksAsCompleted,
+			moveTasksToColumn,
+			setSearchQuery,
+			setColumnById,
+			moveTaskBetweenColumns,
+		]
+	);
+
+	const stateContextValue = useMemo(
+		() => ({
+			columns: filteredColumns,
+			columnFilters: state.columnFilters,
+			searchQuery: state.searchQuery,
+		}),
+		[filteredColumns, state.columnFilters, state.searchQuery]
+	);
+
 	return (
-		<TodoListContext.Provider
-			value={{
-				columns: filteredColumns,
-				columnFilters: state.columnFilters,
-				searchQuery: state.searchQuery,
-				setColumns,
-				addColumn,
-				addTask,
-				deleteTask,
-				toggleCompleteTask,
-				toggleSelectTask,
-				selectAllTasks,
-				unselectAllTasks,
-				unselectAll,
-				setColumnFilter,
-				editColumn,
-				deleteColumn,
-				editTask,
-				bulkDeleteTasks,
-				markTasksAsCompleted,
-				moveTasksToColumn,
-				setSearchQuery,
-				setColumnById,
-				moveTaskBetweenColumns,
-			}}>
-			{children}
-		</TodoListContext.Provider>
+		<TodoListDispatchContext.Provider value={dispatchContextValue}>
+			<TodoListStateContext.Provider value={stateContextValue}>
+				{children}
+			</TodoListStateContext.Provider>
+		</TodoListDispatchContext.Provider>
 	);
 }

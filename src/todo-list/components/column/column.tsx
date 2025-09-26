@@ -60,7 +60,7 @@ const CardList = memo(function CardList({ column }: { column: TaskColumn }) {
 	));
 });
 
-export function Column({ column }: { column: TaskColumn }) {
+export const Column = memo(function Column({ column }: { column: TaskColumn }) {
 	const scrollableRef = useRef<HTMLDivElement | null>(null);
 	const outerFullHeightRef = useRef<HTMLDivElement | null>(null);
 	const headerRef = useRef<HTMLDivElement | null>(null);
@@ -229,4 +229,4 @@ export function Column({ column }: { column: TaskColumn }) {
 			</div>
 		</div>
 	);
-}
+});
